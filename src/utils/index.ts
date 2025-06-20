@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React from 'react';
+import React, { ReactNode } from 'react';
 import {
   findNodeHandle,
   Platform,
@@ -70,7 +70,7 @@ export function runNativeMethod<ReturnType = NativeArg>(
 }
 
 export function cloneReactChildrenWithProps(
-  children: Parameters<typeof React.Children.map>[0],
+  children: ReactNode,
   propsToAdd: { [key: string]: string } = {},
 ) {
   if (!children) {
