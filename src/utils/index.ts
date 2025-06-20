@@ -77,7 +77,7 @@ export function cloneReactChildrenWithProps(
     return null;
   }
 
-  let foundChildren = null;
+  let foundChildren: typeof children[] | null = null;
 
   if (!Array.isArray(children)) {
     foundChildren = [children];
@@ -86,9 +86,19 @@ export function cloneReactChildrenWithProps(
   }
 
   const filteredChildren = foundChildren.filter((child) => !!child); // filter out falsy children, since some can be null
-  return React.Children.map(filteredChildren, (child) =>
-    React.cloneElement(child, propsToAdd),
-  );
+  return React.Children.map(filteredChildren, (child) => {
+    if (!React.isValidElement(child)) {
+      return child;
+    }
+
+    if (child.type === React.Fragment) {
+      // If the child is a Fragment, return it without adding props
+      return child;
+    }
+
+    // Otherwise, clone and add props
+    return React.cloneElement(child, propsToAdd);
+  });
 }
 
 export function resolveImagePath(imageRef: ImageSourcePropType): string {
